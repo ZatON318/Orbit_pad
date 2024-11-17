@@ -1,0 +1,14 @@
+{
+    "app1": {
+        "repo_path": "/path/to/repo/app1",
+        "container_name": "app1_container"
+    },
+    "app2": {
+        "repo_path": "/path/to/repo/app2",
+        "container_name": "app2_container"
+    },
+    "app3": {
+        "repo_path": "/path/to/repo/app3",
+        "container_name": "app3_container"
+    }
+}
