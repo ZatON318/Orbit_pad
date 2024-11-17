@@ -5,11 +5,9 @@ import json
 
 app = Flask(__name__)
 
-# Load app configurations from configapps.json
 with open('configapps.json', 'r') as config_file:
     apps = json.load(config_file)
 
-# Print out all apps in the configuration
 print("Loaded app configurations:")
 for app_name, app_config in apps.items():
     print(f"- {app_name}: repo_path={app_config['repo_path']}, container_name={app_config['container_name']}")
@@ -23,18 +21,12 @@ def webhook(app_name):
     container_name = apps[app_name]["container_name"]
 
     try:
-        # Change to the app's directory
         os.chdir(repo_path)
         
-        # Pull the latest changes from the repository
         subprocess.run(["git", "pull"], check=True)
-        
-        # Rebuild the Docker container
         subprocess.run(["docker", "build", "-t", container_name, "."], check=True)
-        
-        # Restart the Docker container
-        subprocess.run(["docker", "stop", container_name], check=True)
-        subprocess.run(["docker", "rm", container_name], check=True)
+        subprocess.run(["docker", "stop", container_name], check=False)
+        subprocess.run(["docker", "rm", container_name], check=False)
         subprocess.run(["docker", "run", "-d", "--name", container_name, container_name], check=True)
         
         return jsonify({"message": f"{app_name} updated and restarted successfully"})
